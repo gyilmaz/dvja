@@ -40,18 +40,18 @@ public class Login extends BaseController {
         return SUCCESS;
     }
 
-    public String execute() {
-        User user;
+//     public String execute() {
+//         User user;
 
-        if(StringUtils.isEmpty(getLogin()) || StringUtils.isEmpty(getPassword()))
-            return INPUT;
+//         if(StringUtils.isEmpty(getLogin()) || StringUtils.isEmpty(getPassword()))
+//             return INPUT;
 
-        if((user = userAuthenticationService.authenticate(getLogin(), getPassword())) != null) {
-            sessionSetUser(user);
-            return SUCCESS;
-        }
+//         if((user = userAuthenticationService.authenticate(getLogin(), getPassword())) != null) {
+//             sessionSetUser(user);
+//             return SUCCESS;
+//         }
 
-        addActionError("Authentication failed!");
-        return INPUT;
-    }
+//         addActionError("Authentication failed!");
+//         return INPUT;
+//     }
 }
