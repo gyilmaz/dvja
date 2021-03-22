@@ -16,96 +16,96 @@ import java.util.List;
 @Transactional
 public class UserService {
 
-    private static final Logger logger = Logger.getLogger(UserService.class);
-    private EntityManager entityManager;
+//     private static final Logger logger = Logger.getLogger(UserService.class);
+//     private EntityManager entityManager;
 
-    @PersistenceContext
-    public void setEntityManager(EntityManager em) {
-        this.entityManager = em;
-    }
-    public EntityManager getEntityManager() { return this.entityManager; }
+//     @PersistenceContext
+//     public void setEntityManager(EntityManager em) {
+//         this.entityManager = em;
+//     }
+//     public EntityManager getEntityManager() { return this.entityManager; }
 
-    public void save(User user) {
-        logger.debug("Saving user with login: " + user.getLogin() + " id: " + user.getId());
+//     public void save(User user) {
+//         logger.debug("Saving user with login: " + user.getLogin() + " id: " + user.getId());
 
-        if(user.getPassword() != null)
-            user.setPassword(hashEncodePassword(user.getPassword()));
+//         if(user.getPassword() != null)
+//             user.setPassword(hashEncodePassword(user.getPassword()));
 
-        if(user.getId() != null) {
-            entityManager.merge(user);
-        }
-        else {
-            entityManager.persist(user);
-        }
-    }
+//         if(user.getId() != null) {
+//             entityManager.merge(user);
+//         }
+//         else {
+//             entityManager.persist(user);
+//         }
+//     }
 
-    public User find(int id) {
-        return entityManager.find(User.class, id);
-    }
+//     public User find(int id) {
+//         return entityManager.find(User.class, id);
+//     }
 
-    public boolean checkPassword(User user, String password) {
-        if(user == null)
-            return false;
-        if(StringUtils.isEmpty(password))
-            return false;
+//     public boolean checkPassword(User user, String password) {
+//         if(user == null)
+//             return false;
+//         if(StringUtils.isEmpty(password))
+//             return false;
 
-        return user.getPassword().equals(hashEncodePassword(password));
-    }
+//         return user.getPassword().equals(hashEncodePassword(password));
+//     }
 
-    public List<User> findAllUsers() {
-        Query query = entityManager.createQuery("SELECT u FROM User u");
-        List<User> resultList = query.getResultList();
+//     public List<User> findAllUsers() {
+//         Query query = entityManager.createQuery("SELECT u FROM User u");
+//         List<User> resultList = query.getResultList();
 
-        return resultList;
-    }
+//         return resultList;
+//     }
 
-    public User findByLogin(String login) {
-        Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.login = :login").
-                setParameter("login", login).
-                setMaxResults(1);
-        List<User> resultList = query.getResultList();
+//     public User findByLogin(String login) {
+//         Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.login = :login").
+//                 setParameter("login", login).
+//                 setMaxResults(1);
+//         List<User> resultList = query.getResultList();
 
-        if(resultList.size() > 0)
-            return resultList.get(0);
-        else
-            return null;
-    }
+//         if(resultList.size() > 0)
+//             return resultList.get(0);
+//         else
+//             return null;
+//     }
 
-    public User findByLoginUnsafe(String login) {
-        Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.login = '" + login + "'");
-        List<User> resultList = query.getResultList();
+//     public User findByLoginUnsafe(String login) {
+//         Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.login = '" + login + "'");
+//         List<User> resultList = query.getResultList();
 
-        if(resultList.size() > 0)
-            return resultList.get(0);
-        else
-            return null;
-    }
+//         if(resultList.size() > 0)
+//             return resultList.get(0);
+//         else
+//             return null;
+//     }
 
-    public boolean resetPasswordByLogin(String login, String key,
-                                        String password, String passwordConfirmation) {
+//     public boolean resetPasswordByLogin(String login, String key,
+//                                         String password, String passwordConfirmation) {
 
-        if(!StringUtils.equals(password, passwordConfirmation))
-            return false;
+//         if(!StringUtils.equals(password, passwordConfirmation))
+//             return false;
 
-        if(!StringUtils.equalsIgnoreCase(DigestUtils.md5DigestAsHex(login.getBytes()), key))
-            return false;
+//         if(!StringUtils.equalsIgnoreCase(DigestUtils.md5DigestAsHex(login.getBytes()), key))
+//             return false;
 
-        logger.info("Changing password for login: " + login +
-                " New password: " + password);
+//         logger.info("Changing password for login: " + login +
+//                 " New password: " + password);
 
-        User user = findByLogin(login);
-        if(user != null) {
-            user.setPassword(password);
-            save(user);
+//         User user = findByLogin(login);
+//         if(user != null) {
+//             user.setPassword(password);
+//             save(user);
 
-            return true;
-        }
+//             return true;
+//         }
 
-        logger.info("Failed to find user with login: " + login);
-        return false;
-    }
+//         logger.info("Failed to find user with login: " + login);
+//         return false;
+//     }
 
-    private String hashEncodePassword(String password) {
-        return DigestUtils.md5DigestAsHex(password.getBytes());
-    }
+//     private String hashEncodePassword(String password) {
+//         return DigestUtils.md5DigestAsHex(password.getBytes());
+//     }
 }
